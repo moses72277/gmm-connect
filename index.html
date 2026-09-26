@@ -1,58 +1,91 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GMM Connect</title>
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#1877f2">
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GMM V13 Funny Feed</title>
+<link rel="manifest" href='data:application/json;charset=utf-8,{"name":"GMM V13 Funny","short_name":"GMM V13","display":"standalone","theme_color":"#1877f2"}'>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
-body{background:#f0f2f5}
-.header{background:white;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;box-shadow:0 2px 5px rgba(0,0,0,0.1)}
-.logo{color:#1877f2;font-weight:900;font-size:24px}
-.nav a{margin-left:8px;text-decoration:none;background:#e4e6eb;padding:8px 14px;border-radius:20px;color:black;font-weight:600;font-size:14px}
-.nav a.active{background:#1877f2;color:white}
-.create-box{background:white;margin:15px;border-radius:10px;padding:12px;display:flex;align-items:center}
-.create-box img{width:40px;height:40px;border-radius:50%;margin-right:10px}
-.create-box input{flex:1;background:#f0f2f5;border:none;padding:10px 15px;border-radius:20px;outline:none}
-.post{background:white;margin:15px;border-radius:10px;padding:12px}
-.post-head{display:flex;align-items:center;margin-bottom:10px}
-.post-head img{width:40px;height:40px;border-radius:50%;margin-right:10px}
-#loginDiv{height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;background:#f0f2f5}
-.login-card{background:white;padding:30px;border-radius:10px;text-align:center;width:90%;max-width:350px;box-shadow:0 2px 10px rgba(0,0,0,0.1)}
-.login-card h1{color:#1877f2;font-size:40px;margin-bottom:10px}
-.login-card button{background:#1877f2;color:white;border:none;padding:12px 20px;border-radius:6px;width:100%;font-size:16px;font-weight:bold;margin-top:15px;cursor:pointer}
-</style>
-</head>
-<body>
-<div id="loginDiv"><div class="login-card"><h1>gmmconnect</h1><p>Connect with friends</p><button id="loginBtn">Continue with Google</button><p style="font-size:12px;margin-top:15px;color:gray">Built by Moses 🇳🇬</p></div></div>
-<div id="appDiv" style="display:none">
-<div class="header"><div class="logo">gmmconnect</div><div class="nav"><a class="active" href="index.html">🏠</a><a href="chat.html">💬 Chat</a><a href="#" id="logoutBtn">Logout</a></div></div>
-<div class="create-box"><img id="userPic" src=""><input id="postInput" placeholder="What's on your mind?"><button id="postBtn" style="margin-left:10px;background:#1877f2;color:white;border:none;padding:8px 15px;border-radius:20px;font-weight:bold">Post</button></div>
+*{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif}
+body{background:#000;color:#fff}#loginPage{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1877f2,#0a3d91);padding:20px}
+.loginBox{background:#fff;color:#000;max-width:400px;width:100%;border-radius:16px;padding:28px}.loginBox h1{color:#1877f2;text-align:center}.loginBox input{width:100%;padding:14px;border-radius:10px;border:1px solid #ddd;background:#f0f2f5;margin-bottom:10px}
+.btn{width:100%;padding:14px;background:#1877f2;color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer}
+#app{display:none;max-width:500px;margin:0 auto;background:#000;min-height:100vh}
+header{position:sticky;top:0;z-index:20;background:#000;border-bottom:1px solid #222;display:flex;justify-content:space-between;align-items:center;padding:10px 12px}
+.logo{font-weight:800;color:#fff;font-size:20px}.iconBtn{width:36px;height:36px;border-radius:50%;background:#222;border:none;font-size:16px;cursor:pointer;color:#fff}
+.installBar{background:#1877f2;color:#fff;padding:10px 14px;display:flex;justify-content:space-between;align-items:center}
+.tabs{display:flex;background:#000;border-bottom:1px solid #222;position:sticky;top:48px;z-index:10}.tab{flex:1;text-align:center;padding:12px;font-weight:700;color:#777;border-bottom:2px solid transparent;cursor:pointer}.tab.active{color:#fff;border-color:#fff}
+.post{background:#111;border-radius:12px;margin:12px 8px;overflow:hidden;border:1px solid #222}
+.postHead{padding:10px;display:flex;gap:10px;align-items:center}.avatar{width:36px;height:36px;border-radius:50%;background:#1877f2;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+.postMedia img{width:100%;display:block}.postMedia video{width:100%;display:block;background:#000}
+.postText{padding:10px 12px;font-size:15px;line-height:1.3}
+.postActions{display:flex;justify-content:space-between;padding:8px 12px;border-top:1px solid #222}.act{padding:6px 12px;background:#222;border-radius:20px;font-size:13px;cursor:pointer}
+.composer{background:#111;padding:10px;margin:8px;border-radius:10px;display:flex;gap:10px;align-items:center;border:1px solid #222}
+.composer input{flex:1;background:#222;border:none;border-radius:20px;padding:10px 14px;color:#fff;outline:none}
+.userRow{display:flex;gap:12px;padding:12px;background:#111;margin-bottom:1px;align-items:center;cursor:pointer;border-bottom:1px solid #222}
+.view{display:none}.view.active{display:block}
+#chatWindow{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:500px;height:75vh;background:#111;z-index:50;border-radius:16px 16px 0 0;display:none;flex-direction:column;border:1px solid #333}
+#chatWindow.open{display:flex}.chatBody{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px}.bubble{max-width:72%;padding:8px 12px;border-radius:18px;font-size:14px}.me{align-self:flex-end;background:#1877f2;color:#fff}.them{align-self:flex-start;background:#222;color:#fff}
+.chatInput{display:flex;gap:8px;padding:10px;border-top:1px solid #333}.chatInput input{flex:1;background:#222;border:none;border-radius:20px;padding:10px;color:#fff}
+.stories{display:flex;gap:8px;padding:12px 8px;overflow-x:auto;border-bottom:1px solid #222}.story{min-width:100px;height:170px;border-radius:12px;background-size:cover;flex-shrink:0;background-color:#222}
+</style></head><body>
+<div id="loginPage"><div class="loginBox"><h1 style="text-align:center">gmmconnect</h1><p style="text-align:center;color:#666;font-size:12px;margin:6px 0 16px">V13 FUNNY FEED • Full of memes & videos</p>
+<input id="uid" placeholder="ND1 ID"><input id="pwd" type="password" placeholder="Password">
+<button class="btn" onclick="login()">Log In</button><p style="font-size:11px;color:#666;margin-top:10px;text-align:center">Demo: ND1-2024-001 / gmmconnect2024</p></div></div>
+<div id="app">
+<div id="installBar" class="installBar"><span>📱 Install GMM Funny App?</span><button class="btn" style="width:auto;padding:6px 12px;background:#fff;color:#1877f2;border-radius:20px" onclick="installApp()">Install</button></div>
+<header><div class="logo">gmmconnect V13</div><div style="display:flex;gap:6px"><button class="iconBtn" onclick="switchTab('feed')">🏠</button><button class="iconBtn" onclick="switchTab('messages')">💬</button><button class="iconBtn" onclick="document.getElementById('filePick').click()">📷</button><button class="iconBtn" onclick="logout()">🚪</button></div></header>
+<div class="tabs"><div id="tab-feed" class="tab active" onclick="switchTab('feed')">For You 🔥</div><div id="tab-messages" class="tab" onclick="switchTab('messages')">Messages</div></div>
+<div id="view-feed" class="view active">
+<div class="stories">
+<div class="story" style="background:#222;display:flex;flex-direction:column;align-items:center;justify-content:center"><div style="font-size:30px">+</div><span style="font-size:11px">Create story</span></div>
+<div class="story" style="background-image:linear-gradient(180deg,transparent,#000), url('https://picsum.photos/seed/fun1/200/300')"></div>
+<div class="story" style="background-image:linear-gradient(180deg,transparent,#000), url('https://picsum.photos/seed/fun2/200/300')"></div>
+<div class="story" style="background-image:linear-gradient(180deg,transparent,#000), url('https://picsum.photos/seed/fun3/200/300')"></div>
+</div>
+<div class="composer"><div class="avatar" id="myAv">S</div><input id="postInput" placeholder="Post funny video?"><input type="file" id="filePick" accept="image/*,video/*" style="display:none" onchange="handleFile(this)"><button onclick="makePost()" style="background:#1877f2;color:#fff;border:none;border-radius:20px;padding:8px 14px">Post</button></div>
 <div id="feed"></div>
 </div>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, doc, updateDoc, arrayUnion, arrayRemove, getDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
-const firebaseConfig = {
-  apiKey: "AIzaSyB5CE1LNky6HkqDn4uLHPVScILlz-NPIws",
-  authDomain: "gmmconnect01.firebaseapp.com",
-  databaseURL: "https://gmmconnect01-default-rtdb.firebaseio.com",
-  projectId: "gmmconnect01",
-  storageBucket: "gmmconnect01.firebasestorage.app",
-  messagingSenderId: "1079348259443",
-  appId: "1:1079348259443:web:d277772f63b980f8fc9806"
-};
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app); const db = getFirestore(app); const provider = new GoogleAuthProvider();
-const loginDiv = document.getElementById("loginDiv"); const appDiv = document.getElementById("appDiv");
-document.getElementById("loginBtn").onclick = async ()=>{ try{ await signInWithPopup(auth, provider);}catch(e){alert(e.message);} };
-document.getElementById("logoutBtn").onclick = ()=> signOut(auth);
-onAuthStateChanged(auth, (user)=>{ if(user){ loginDiv.style.display="none"; appDiv.style.display="block"; document.getElementById("userPic").src = user.photoURL; loadFeed(user); } else{ loginDiv.style.display="flex"; appDiv.style.display="none"; } });
-document.getElementById("postBtn").onclick = async ()=>{ const text = document.getElementById("postInput").value; if(!text) return; const user = auth.currentUser; await addDoc(collection(db, "posts"), { text, name: user.displayName, photo: user.photoURL, uid: user.uid, likes: [], time: serverTimestamp() }); document.getElementById("postInput").value=""; };
-function loadFeed(currentUser){ const q = query(collection(db, "posts"), orderBy("time","desc")); onSnapshot(q, (snap)=>{ const feed = document.getElementById("feed"); feed.innerHTML=""; snap.forEach(d=>{ const post = d.data(); const id = d.id; feed.innerHTML += `<div class="post"><div class="post-head"><img src="${post.photo}"><div><b>${post.name}</b></div></div><div>${post.text}</div><div style="color:gray;font-size:14px;margin-top:5px">${post.likes?.length||0} likes</div></div>`; }); }); }
+<div id="view-messages" class="view"><div id="userList"></div></div>
+</div>
+<div id="chatWindow"><div style="padding:12px;border-bottom:1px solid #333;display:flex;align-items:center;gap:10px"><div class="avatar" id="chatAv">U</div><b id="chatName" style="flex:1">Name</b><button class="iconBtn" onclick="closeChat()">✕</button></div><div id="chatBody" class="chatBody"></div><div class="chatInput"><input id="chatInput" placeholder="Aa" onkeypress="if(event.key==='Enter')sendMsg()"><button class="iconBtn" style="background:#1877f2" onclick="sendMsg()">➤</button></div></div>
+<script>
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt', e=>{e.preventDefault();deferredPrompt=e;});
+function installApp(){if(deferredPrompt){deferredPrompt.prompt();}else{alert('To install: Android → 3 dots → Add to Home Screen\n iPhone → Share → Add to Home Screen 📱');}}
+const FUNNY_POSTS=[
+{name:'Meme Lord 😂',initial:'😂',text:'POV: You said you will read overnight but sleep carry you 😭💀',time:'2m ago',likes:1204,media:'https://picsum.photos/seed/meme1/600/600',type:'image'},
+{name:'Campus Wahala',initial:'🤣',text:'ND1 lecturer: "This question is simple"\nThe question: 👇',time:'15m ago',likes:890,media:'https://picsum.photos/seed/meme2/600/750',type:'image'},
+{name:'Funny Videos NG',initial:'🎥',text:'This dog get more rizz than me 😂🔥 #funny #viral',time:'32m ago',likes:2301,media:'https://www.w3schools.com/html/mov_bbb.mp4',type:'video'},
+{name:'Gist Lover',initial:'👀',text:'When you borrow your friend money and he post new shoe 💀',time:'1h ago',likes:567,media:'https://picsum.photos/seed/meme3/600/500',type:'image'},
+{name:'Comedy Hub',initial:'😹',text:'No way this cat really did that 😭😭',time:'1h ago',likes:3400,media:'https://www.w3schools.com/html/movie.mp4',type:'video'},
+{name:'Relatable AF',initial:'💀',text:'Me pretending to understand Java after watching 1 tutorial',time:'2h ago',likes:1233,media:'https://picsum.photos/seed/meme4/600/600',type:'image'},
+{name:'Student Life',initial:'📚',text:'Exam hall be like: If you know you know 😂',time:'3h ago',likes:789,media:'https://picsum.photos/seed/meme5/600/700',type:'image'},
+{name:'Viral Clips',initial:'🔥',text:'Bro really thought he could fly 😂 Wait for it!!!',time:'4h ago',likes:5600,media:'https://sample-videos.com/video321/mp4/480/big_buck_bunny_480p_1mb.mp4',type:'video'},
+{name:'Naija Memes',initial:'🇳🇬',text:'When NEPA take light and you were about to submit assignment 😭',time:'5h ago',likes:2100,media:'https://picsum.photos/seed/meme6/600/600',type:'image'},
+{name:'WTF Moments',initial:'🤯',text:'I cant stop laughing at this filter 😂😂',time:'6h ago',likes:950,media:'https://picsum.photos/seed/meme7/600/800',type:'image'}
+];
+const USERS=[{id:'ND1-2024-001',name:'Stella Moore',initial:'S'},{id:'ND1-2024-002',name:'Chinedu',initial:'C'},{id:'ND1-2024-003',name:'Aisha',initial:'A'}];
+let me=null,activeChat=null,pendingMedia=null;
+let userPosts=JSON.parse(localStorage.getItem('gmm_v13_posts')||'[]');
+let chats=JSON.parse(localStorage.getItem('gmm_v13_chats')||'{}');
+function login(){const id=document.getElementById('uid').value.trim()||'ND1-2024-001';me=USERS.find(x=>x.id===id)||{id:id,name:id,initial:id[0].toUpperCase()};localStorage.setItem('gmm_v13_me',JSON.stringify(me));document.getElementById('loginPage').style.display='none';document.getElementById('app').style.display='block';document.getElementById('myAv').textContent=me.initial;renderFeed();renderUsers();}
+function logout(){localStorage.removeItem('gmm_v13_me');location.reload();}
+function switchTab(t){document.querySelectorAll('.tab').forEach(e=>e.classList.remove('active'));document.querySelectorAll('.view').forEach(e=>e.classList.remove('active'));document.getElementById('tab-'+t).classList.add('active');document.getElementById('view-'+t).classList.add('active');}
+function handleFile(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{pendingMedia={url:e.target.result,type:f.type.startsWith('video')?'video':'image'};makePost();};r.readAsDataURL(f);}
+function makePost(){const txt=document.getElementById('postInput').value.trim();if(!txt &&!pendingMedia) return;const p={name:me.name,initial:me.initial,text:txt||'Funny af 😂',time:'Just now',likes:0,media:pendingMedia?.url,type:pendingMedia?.type};userPosts.unshift(p);localStorage.setItem('gmm_v13_posts',JSON.stringify(userPosts));document.getElementById('postInput').value='';pendingMedia=null;renderFeed();}
+function renderFeed(){
+  const all=[...userPosts.map(p=>({name:p.name,initial:p.initial,text:p.text,time:p.time,likes:p.likes,media:p.media,type:p.type||'image'})),...FUNNY_POSTS];
+  document.getElementById('feed').innerHTML=all.map((p)=>`
+  <div class="post">
+    <div class="postHead"><div class="avatar">${p.initial}</div><div><b style="font-size:14px">${p.name}</b><br><span style="font-size:11px;color:#777">${p.time} • Funny</span></div><div style="margin-left:auto">⋯</div></div>
+    <div class="postText">${p.text}</div>
+    ${p.media?`<div class="postMedia">${p.type==='video'?`<video src="${p.media}" controls playsinline loop muted autoplay></video>`:`<img src="${p.media}" loading="lazy">`}</div>`:''}
+    <div class="postActions"><div class="act">❤️ Like</div><div class="act">💬 Comment</div><div class="act">↗️ Share</div><div class="act">🔖 Save</div></div>
+  </div>`).join('');
+}
+function renderUsers(){const others=USERS.filter(u=>u.id!==me?.id);document.getElementById('userList').innerHTML=others.map(u=>`<div class="userRow" onclick="openChat('${u.id}')"><div class="avatar">${u.initial}</div><div><b>${u.name}</b><div style="font-size:11px;color:#777">Online • Tap to chat</div></div></div>`).join('');}
+function openChat(uid){const u=USERS.find(x=>x.id===uid);activeChat=uid;document.getElementById('chatName').textContent=u.name;document.getElementById('chatAv').textContent=u.initial;document.getElementById('chatWindow').classList.add('open');renderChat();}
+function closeChat(){document.getElementById('chatWindow').classList.remove('open');activeChat=null;}
+function renderChat(){if(!activeChat)return;const key=[me.id,activeChat].sort().join('__');const msgs=chats[key]||[];const body=document.getElementById('chatBody');body.innerHTML=msgs.map(m=>`<div class="bubble ${m.from===me.id?'me':'them'}">${m.text}</div>`).join('')||'<div style="text-align:center;color:#555;padding:30px">Send funny meme 😂</div>';body.scrollTop=body.scrollHeight;}
+function sendMsg(){const inp=document.getElementById('chatInput');if(!inp.value.trim()||!activeChat)return;const key=[me.id,activeChat].sort().join('__');if(!chats[key])chats[key]=[];chats[key].push({from:me.id,text:inp.value});localStorage.setItem('gmm_v13_chats',JSON.stringify(chats));inp.value='';renderChat();}
+(function(){const s=localStorage.getItem('gmm_v13_me');if(s){me=JSON.parse(s);document.getElementById('loginPage').style.display='none';document.getElementById('app').style.display='block';document.getElementById('myAv').textContent=me.initial;renderFeed();renderUsers();}})();
 </script>
-</body>
-</html>
+</body></html>
