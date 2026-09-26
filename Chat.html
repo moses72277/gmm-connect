@@ -10,29 +10,36 @@ body{background:#f0f2f5;height:100vh;display:flex;flex-direction:column}
 .header{background:white;padding:12px;display:flex;align-items:center;box-shadow:0 1px 3px rgba(0,0,0,0.1)}
 .header a{text-decoration:none;background:#e4e6eb;padding:6px 12px;border-radius:20px;color:black;margin-right:10px}
 .chat-box{flex:1;overflow-y:auto;padding:15px;padding-bottom:80px}
-.msg{background:white;padding:10px 14px;border-radius:18px;margin:6px 0;max-width:75%;box-shadow:0 1px 1px rgba(0,0,0,0.1)}
-.me{background:#0084ff;color:white;margin-left:auto;border-bottom-right-radius:4px}
-.other{border-bottom-left-radius:4px}
+.msg{background:white;padding:10px 14px;border-radius:18px;margin:6px 0;max-width:75%}
+.me{background:#0084ff;color:white;margin-left:auto}
 .msg small{font-size:11px;opacity:0.7;display:block;margin-bottom:2px}
-.input-area{position:fixed;bottom:0;left:0;right:0;background:white;padding:10px;display:flex;align-items:center}
+.input-area{position:fixed;bottom:0;left:0;right:0;background:white;padding:10px;display:flex}
 .input-area input{flex:1;padding:12px 15px;border-radius:25px;border:none;background:#f0f2f5;outline:none}
-.input-area button{background:#0084ff;color:white;border:none;width:40px;height:40px;border-radius:50%;margin-left:8px;font-size:18px}
+.input-area button{background:#0084ff;color:white;border:none;width:40px;height:40px;border-radius:50%;margin-left:8px}
 </style>
 </head>
 <body>
-<div class="header"><a href="index.html">⬅</a><b>GMM Chat - Live</b><span style="margin-left:auto;color:green;font-size:12px">● Online</span></div>
+<div class="header"><a href="index.html">⬅</a><b>GMM Chat - LIVE</b><span style="margin-left:auto;color:green;font-size:12px">● Online</span></div>
 <div class="chat-box" id="chatBox"></div>
 <div class="input-area"><input id="msgInput" placeholder="Type a message..."><button onclick="sendMsg()">➤</button></div>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
-const firebaseConfig = { apiKey: "AIzaSyD-EXAMPLE-REPLACE-WITH-YOURS", authDomain: "gmmconnect01.firebaseapp.com", projectId: "gmmconnect01", storageBucket: "gmmconnect01.appspot.com", messagingSenderId: "123456789", appId: "1:123456789:web:abcdef" };
-const app = initializeApp(firebaseConfig); const db = getFirestore(app); const auth = getAuth(app); let currentUser = null;
-onAuthStateChanged(auth, (user)=>{ if(!user){ window.location.href="index.html"; return; } currentUser = user; });
+const firebaseConfig = {
+  apiKey: "AIzaSyB5CE1LNky6HkqDn4uLHPVScILlz-NPIws",
+  authDomain: "gmmconnect01.firebaseapp.com",
+  databaseURL: "https://gmmconnect01-default-rtdb.firebaseio.com",
+  projectId: "gmmconnect01",
+  storageBucket: "gmmconnect01.firebasestorage.app",
+  messagingSenderId: "1079348259443",
+  appId: "1:1079348259443:web:d277772f63b980f8fc9806"
+};
+const app = initializeApp(firebaseConfig); const db = getFirestore(app); const auth = getAuth(app); let currentUser=null;
+onAuthStateChanged(auth, (user)=>{ if(!user){ window.location.href="index.html"; return; } currentUser=user; });
 const q = query(collection(db, "messages"), orderBy("time","asc"));
-onSnapshot(q, (snap)=>{ const box = document.getElementById("chatBox"); box.innerHTML=""; snap.forEach(doc=>{ const d = doc.data(); const isMe = d.uid === currentUser?.uid; const div = document.createElement("div"); div.className = "msg " + (isMe?"me":"other"); div.innerHTML = `<small>${isMe?"You":d.name}</small>${d.text}`; box.appendChild(div); }); box.scrollTop = box.scrollHeight; });
-window.sendMsg = async ()=>{ const input = document.getElementById("msgInput"); if(!input.value.trim() || !currentUser) return; const text = input.value; input.value=""; await addDoc(collection(db, "messages"), { text, name: currentUser.displayName, photo: currentUser.photoURL, uid: currentUser.uid, time: serverTimestamp() }); };
+onSnapshot(q, (snap)=>{ const box=document.getElementById("chatBox"); box.innerHTML=""; snap.forEach(doc=>{ const d=doc.data(); const isMe=d.uid===currentUser?.uid; const div=document.createElement("div"); div.className="msg "+(isMe?"me":"other"); div.innerHTML=`<small>${isMe?"You":d.name}</small>${d.text}`; box.appendChild(div); }); box.scrollTop=box.scrollHeight; });
+window.sendMsg=async()=>{ const input=document.getElementById("msgInput"); if(!input.value.trim()||!currentUser) return; const text=input.value; input.value=""; await addDoc(collection(db, "messages"), { text, name: currentUser.displayName, photo: currentUser.photoURL, uid: currentUser.uid, time: serverTimestamp() }); };
 document.getElementById("msgInput").addEventListener("keypress",(e)=>{ if(e.key==="Enter") sendMsg(); });
 </script>
 </body>
